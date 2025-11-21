@@ -49,7 +49,6 @@ export default function Home() {
     </main>
   );
 }
-"use client";
 
 import { useState, useRef } from "react";
 import { Upload, TrendingUp, TrendingDown, Minus, Activity, Target, BarChart3, AlertCircle, Camera, Monitor, ChevronDown, ChevronUp, Info } from "lucide-react";
