@@ -666,7 +666,7 @@ export default function ChartAnalyzer() {
                 Esta análise é baseada em inteligência artificial e não constitui aconselhamento financeiro. 
                 Trading envolve riscos significativos. Sempre faça sua própria pesquisa e consulte profissionais qualificados antes de tomar decisões de investimento.
               </p>
-            </div>
+            </div> 
           </div>
         </Card>
       </div>
