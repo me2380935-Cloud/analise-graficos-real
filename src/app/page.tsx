@@ -17,7 +17,7 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
-  // 🔥 NOVO – ANALISAR GRÁFICO E REDIRECIONAR PARA RESULTADO PREMIUM
+  // 🔥 ANALISAR E REDIRECIONAR PARA RESULTADO PREMIUM
   const analyzeChart = async () => {
     if (!image) {
       alert("Envie um gráfico primeiro!");
@@ -38,19 +38,19 @@ export default function Home() {
       if (data.error) {
         alert("Erro: " + data.error);
       } else {
-        // 🔥 Redireciona para /result-test com os dados
+        // 🔥 Redireciona para /result-test com os dados premium
         const params = new URLSearchParams({
-          reco: data.recommendation,
-          conf: data.confidence,
-          trend: data.trend,
-          analysis: data.analysis,
-          risk: data.riskLevel,
-          support: data.support,
-          resistance: data.resistance,
-          entry: data.entryPoint,
-          stop: data.stopLoss,
-          take: data.takeProfit,
-          time: data.timeframe,
+          reco: data.recommendation || "",
+          conf: String(data.confidence || ""),
+          trend: data.trend || "",
+          analysis: data.analysis || "",
+          risk: data.riskLevel || "",
+          support: data.support || "",
+          resistance: data.resistance || "",
+          entry: data.entryPoint || "",
+          stop: data.stopLoss || "",
+          take: data.takeProfit || "",
+          time: data.timeframe || "",
         });
 
         window.location.href = `/result-test?${params.toString()}`;
@@ -110,9 +110,7 @@ export default function Home() {
           </p>
           <p className="upload-sub">PNG, JPG ou print de tela</p>
 
-          {image && (
-            <img src={image} alt="preview" className="preview-img" />
-          )}
+          {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
         {/* BOTÃO ANALISAR */}
