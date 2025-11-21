@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, Camera } from "lucide-react";
+import { ArrowUp, ArrowDown, Minus, Upload } from "lucide-react";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<any>(null);
 
-  // UPLOAD
+  // Upload handler
   const handleUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -18,7 +18,7 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
-  // ANALISAR
+  // Analisar gráfico
   const analyzeChart = async () => {
     if (!image) {
       alert("Envie um gráfico primeiro!");
@@ -49,9 +49,20 @@ export default function Home() {
     setLoading(false);
   };
 
+  const getRecommendationColor = (rec: string) => {
+    if (rec === "BUY") return "#00ff9d";
+    if (rec === "SELL") return "#ff4f4f";
+    return "#4fb4ff";
+  };
+
+  const getRecommendationIcon = (rec: string) => {
+    if (rec === "BUY") return <ArrowUp size={26} color="#00ff9d" />;
+    if (rec === "SELL") return <ArrowDown size={26} color="#ff4f4f" />;
+    return <Minus size={26} color="#4fb4ff" />;
+  };
+
   return (
     <main className="page-container">
-
       {/* HEADER */}
       <div className="card header-card">
         <div className="header-left">
@@ -66,7 +77,7 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* CARD PRINCIPAL */}
+      {/* CAPTURAR GRÁFICO */}
       <div className="card main-card">
         <div className="card-header">
           <div>
@@ -75,13 +86,11 @@ export default function Home() {
           </div>
 
           <div className="action-buttons">
-            {/* UPLOAD */}
             <label className="small-btn">
               Upload
               <input type="file" accept="image/*" hidden onChange={handleUpload} />
             </label>
 
-            {/* CAMERA */}
             <label className="small-btn">
               Tela
               <input type="file" accept="image/*" capture="environment" hidden onChange={handleUpload} />
@@ -98,16 +107,10 @@ export default function Home() {
           <p className="upload-text">
             {image ? "Imagem carregada!" : "Clique para fazer upload"}
           </p>
-
           <p className="upload-sub">PNG, JPG ou print de tela</p>
 
           {image && (
-            <img
-              src={image}
-              alt="preview"
-              className="preview-img"
-              style={{ marginTop: 15 }}
-            />
+            <img src={image} alt="preview" className="preview-img" />
           )}
         </div>
 
@@ -116,35 +119,89 @@ export default function Home() {
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
 
-        {/* RESULTADO */}
+        {/* RESULTADO PREMIUM */}
         {analysis && (
           <div className="resultado-card">
-            <h3>Resultado:</h3>
+            {/* RECOMENDAÇÃO */}
+            <div
+              className="rec-box"
+              style={{ borderColor: getRecommendationColor(analysis.recommendation) }}
+            >
+              <div className="rec-left">
+                {getRecommendationIcon(analysis.recommendation)}
+                <div>
+                  <p className="rec-label">Recomendação</p>
+                  <p
+                    className="rec-value"
+                    style={{ color: getRecommendationColor(analysis.recommendation) }}
+                  >
+                    {analysis.recommendation}
+                  </p>
+                </div>
+              </div>
 
-            <p><b>Recomendação:</b> {analysis.recommendation}</p>
-            <p><b>Confiança:</b> {analysis.confidence}%</p>
-            <p><b>Tendência:</b> {analysis.trend}</p>
-            <p><b>Suporte:</b> {analysis.support}</p>
-            <p><b>Resistência:</b> {analysis.resistance}</p>
+              <div className="confidence">
+                <p>Confiança</p>
+                <div className="bar-bg">
+                  <div
+                    className="bar-fill"
+                    style={{ width: `${analysis.confidence}%` }}
+                  ></div>
+                </div>
+                <p className="conf-value">{analysis.confidence}%</p>
+              </div>
+            </div>
 
-            <h4 style={{ marginTop: 10 }}>Indicadores:</h4>
-            {analysis.indicators?.map((ind: any, i: number) => (
-              <p key={i}>
-                <b>{ind.name}</b>: {ind.value} ({ind.signal})
-              </p>
-            ))}
+            {/* TENDÊNCIA */}
+            <div className="info-row">
+              <p><b>Tendência:</b> {analysis.trend}</p>
+              <p><b>Risco:</b> {analysis.riskLevel}</p>
+            </div>
 
-            <p style={{ marginTop: 10 }}><b>Análise:</b> {analysis.analysis}</p>
+            {/* SUPORTE / RESISTÊNCIA */}
+            <div className="info-row">
+              <p><b>Suporte:</b> {analysis.support}</p>
+              <p><b>Resistência:</b> {analysis.resistance}</p>
+            </div>
 
-            <p><b>Risco:</b> {analysis.riskLevel}</p>
-            <p><b>Entrada:</b> {analysis.entryPoint}</p>
-            <p><b>Stop:</b> {analysis.stopLoss}</p>
-            <p><b>Take Profit:</b> {analysis.takeProfit}</p>
+            {/* INDICADORES */}
+            <div className="indicadores-block">
+              <h4>Indicadores Técnicos</h4>
 
-            <p><b>Prazo:</b> {analysis.timeframe}</p>
+              {analysis.indicators?.map((i: any, index: number) => (
+                <div key={index} className="ind-row">
+                  <p><b>{i.name}:</b> {i.value}</p>
+                  <span
+                    className={`ind-${i.signal}`}
+                  >
+                    {i.signal}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* RESUMO */}
+            <div className="analysis-block">
+              <h4>Resumo Inteligente</h4>
+              <p>{analysis.analysis}</p>
+            </div>
+
+            {/* ESTRATÉGIA */}
+            <div className="info-row">
+              <p><b>Entrada:</b> {analysis.entryPoint}</p>
+              <p><b>Stop:</b> {analysis.stopLoss}</p>
+            </div>
+
+            <div className="info-row">
+              <p><b>Take Profit:</b> {analysis.takeProfit}</p>
+              <p><b>Prazo:</b> {analysis.timeframe}</p>
+            </div>
 
             {analysis.marketContext && (
-              <p><b>Contexto:</b> {analysis.marketContext}</p>
+              <div className="analysis-block">
+                <h4>Contexto do Mercado</h4>
+                <p>{analysis.marketContext}</p>
+              </div>
             )}
           </div>
         )}
