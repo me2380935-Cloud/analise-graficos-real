@@ -1,10 +1,57 @@
 "use client";
 
-import { Upload } from "lucide-react";
+import { useState } from "react";
+import { Upload, Camera } from "lucide-react";
 
 export default function Home() {
+  const [image, setImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [analysis, setAnalysis] = useState<any>(null);
+
+  // UPLOAD
+  const handleUpload = (event: any) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  // ANALISAR
+  const analyzeChart = async () => {
+    if (!image) {
+      alert("Envie um gráfico primeiro!");
+      return;
+    }
+
+    setLoading(true);
+    setAnalysis(null);
+
+    try {
+      const resp = await fetch("/api/analyze-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image }),
+      });
+
+      const data = await resp.json();
+
+      if (data.error) {
+        alert("Erro: " + data.error);
+      } else {
+        setAnalysis(data);
+      }
+    } catch (err) {
+      alert("Erro ao analisar gráfico.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <main className="page-container">
+
       {/* HEADER */}
       <div className="card header-card">
         <div className="header-left">
@@ -19,7 +66,7 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* CARD CAPTURAR GRÁFICO */}
+      {/* CARD PRINCIPAL */}
       <div className="card main-card">
         <div className="card-header">
           <div>
@@ -28,8 +75,17 @@ export default function Home() {
           </div>
 
           <div className="action-buttons">
-            <button className="small-btn">Upload</button>
-            <button className="small-btn">Tela</button>
+            {/* UPLOAD */}
+            <label className="small-btn">
+              Upload
+              <input type="file" accept="image/*" hidden onChange={handleUpload} />
+            </label>
+
+            {/* CAMERA */}
+            <label className="small-btn">
+              Tela
+              <input type="file" accept="image/*" capture="environment" hidden onChange={handleUpload} />
+            </label>
           </div>
         </div>
 
@@ -39,14 +95,60 @@ export default function Home() {
             <Upload size={42} color="white" />
           </div>
 
-          <p className="upload-text">Clique para fazer upload</p>
+          <p className="upload-text">
+            {image ? "Imagem carregada!" : "Clique para fazer upload"}
+          </p>
+
           <p className="upload-sub">PNG, JPG ou print de tela</p>
+
+          {image && (
+            <img
+              src={image}
+              alt="preview"
+              className="preview-img"
+              style={{ marginTop: 15 }}
+            />
+          )}
         </div>
 
         {/* BOTÃO ANALISAR */}
-        <button className="analisar-btn">Analisar Gráfico</button>
+        <button className="analisar-btn" onClick={analyzeChart}>
+          {loading ? "Analisando..." : "Analisar Gráfico"}
+        </button>
+
+        {/* RESULTADO */}
+        {analysis && (
+          <div className="resultado-card">
+            <h3>Resultado:</h3>
+
+            <p><b>Recomendação:</b> {analysis.recommendation}</p>
+            <p><b>Confiança:</b> {analysis.confidence}%</p>
+            <p><b>Tendência:</b> {analysis.trend}</p>
+            <p><b>Suporte:</b> {analysis.support}</p>
+            <p><b>Resistência:</b> {analysis.resistance}</p>
+
+            <h4 style={{ marginTop: 10 }}>Indicadores:</h4>
+            {analysis.indicators?.map((ind: any, i: number) => (
+              <p key={i}>
+                <b>{ind.name}</b>: {ind.value} ({ind.signal})
+              </p>
+            ))}
+
+            <p style={{ marginTop: 10 }}><b>Análise:</b> {analysis.analysis}</p>
+
+            <p><b>Risco:</b> {analysis.riskLevel}</p>
+            <p><b>Entrada:</b> {analysis.entryPoint}</p>
+            <p><b>Stop:</b> {analysis.stopLoss}</p>
+            <p><b>Take Profit:</b> {analysis.takeProfit}</p>
+
+            <p><b>Prazo:</b> {analysis.timeframe}</p>
+
+            {analysis.marketContext && (
+              <p><b>Contexto:</b> {analysis.marketContext}</p>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
 }
-
