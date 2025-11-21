@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "technicalindicators": "^3.1.0",
   "dependencies": {
+  "technicalindicators": "^3.1.0",
     "@fontsource/geist-mono": "^5.1.0",
     "@fontsource/geist-sans": "^5.1.0",
     "@fontsource/inter": "^5.2.0",
