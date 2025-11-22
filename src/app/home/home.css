@@ -2,80 +2,53 @@
 
 .page-container {
   min-height: 100vh;
-  padding: 30px;
+  padding: 22px;
   background: radial-gradient(circle at top, #260043, #000000 80%);
   color: white;
   font-family: "Inter", sans-serif;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header-card {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 25px rgba(162, 0, 255, 0.35);
-  padding: 22px;
+  box-shadow: 0 0 25px rgba(162, 0, 255, 0.3);
+  padding: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
 }
 
 .app-logo {
   font-size: 40px;
 }
 
-.header-text h1 {
-  font-size: 26px;
-  font-weight: 700;
-}
-
-.header-text p {
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-/* ===== BOTÃO DO TOPO ===== */
-.modo-btn {
-  padding: 10px 22px;
-  border-radius: 12px;
-  border: 2px solid #b244ff;
-  background: transparent;
-  color: #d56bff;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.modo-btn:hover {
-  background: rgba(178, 68, 255, 0.2);
-}
-
-/* ===== CARD PRINCIPAL ===== */
+/* CARD CAPTURA */
 .main-card {
-  margin-top: 12px;
+  margin-top: 20px;
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 25px rgba(162, 0, 255, 0.25);
-  padding: 28px;
-  width: 100%;
-  box-sizing: border-box;
+  box-shadow: 0 0 22px rgba(162, 0, 255, 0.25);
+  padding: 26px;
+
+  /* 🎯 AQUI ENTRA A CORREÇÃO QUE AJUSTA OS BOTÕES */
+  padding-left: 28px;
+  padding-right: 28px;
 }
 
-/* AUMENTAMOS O ESPAÇO LATERAL DOS BOTÕES */
+/* CABEÇALHO DO CARD */
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 6px;
+
+  /* 🎯 ISSO CRIA ESPAÇAMENTO INTERNO PARA OS BOTÕES */
+  padding-right: 8px;
 }
 
-.card-header h2 {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-/* ===== BOTÕES UPLOAD ===== */
+/* Upload Buttons */
 .action-buttons {
   display: flex;
   gap: 14px;
@@ -84,42 +57,24 @@
 .small-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #b244ff;
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-radius: 12px;
   font-size: 15px;
   color: #e6baff;
   transition: 0.3s;
-  width: 85px;
-  text-align: center;
 }
 
 .small-btn:hover {
-  background: rgba(178, 68, 255, 0.3);
+  background: rgba(178, 68, 255, 0.32);
 }
 
-/* ===== ÁREA DE UPLOAD ===== */
+/* UPLOAD BOX */
 .upload-area {
-  margin-top: 22px;
+  margin-top: 20px;
   border: 2px dashed rgba(200, 120, 255, 0.7);
   padding: 35px;
   border-radius: 15px;
   text-align: center;
-  transition: 0.3s;
-}
-
-.upload-area:hover {
-  background: rgba(255,255,255,0.05);
-  transform: scale(1.02);
-}
-
-.upload-text {
-  margin-top: 12px;
-  color: #d8aaff;
-}
-
-.upload-sub {
-  font-size: 13px;
-  opacity: 0.7;
 }
 
 /* PREVIEW */
@@ -128,39 +83,28 @@
   margin-top: 20px;
   border-radius: 12px;
   border: 2px solid #b455ff;
-  box-shadow: 0 0 20px #b455ff;
+  box-shadow: 0 0 15px #b455ff;
 }
 
-/* ===== BOTÃO ANALISAR — PULSANTE ===== */
+/* BOTÃO ANALISAR (Versão pulsante + neon) */
 .analisar-btn {
-  margin-top: 24px;
+  margin-top: 20px;
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border-radius: 12px;
-  background: linear-gradient(90deg, #a600ff, #5b009e);
+  background: linear-gradient(90deg, #c800ff, #7000d4);
   color: white;
   font-weight: 700;
   border: none;
   font-size: 18px;
-  transition: 0.3s;
-  animation: pulseGlow 2.2s infinite ease-in-out;
+  transition: 0.25s;
+  
+  box-shadow: 0 0 18px #a020f0;
+  animation: pulseGlow 2.3s infinite ease-in-out;
 }
 
-/* HOVER */
-.analisar-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 0 25px #c45aff;
-}
-
-/* ===== ANIMAÇÃO DO BOTÃO PULSANTE ===== */
 @keyframes pulseGlow {
-  0% {
-    box-shadow: 0 0 10px #c45aff;
-  }
-  50% {
-    box-shadow: 0 0 28px #d56bff;
-  }
-  100% {
-    box-shadow: 0 0 10px #c45aff;
-  }
+  0% { transform: scale(1); box-shadow: 0 0 12px #a020f0; }
+  50% { transform: scale(1.04); box-shadow: 0 0 26px #d580ff; }
+  100% { transform: scale(1); box-shadow: 0 0 12px #a020f0; }
 }
