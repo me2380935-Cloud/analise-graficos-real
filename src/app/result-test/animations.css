@@ -1,0 +1,51 @@
+.fade-in {
+  animation: fadeIn 0.7s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BRILHO pulsante ao redor do card */
+.premium-glow {
+  animation: glowPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(168, 85, 247, 0.9); }
+  100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+}
+
+/* PULSE neon na recomendação */
+.reco-pulse {
+  animation: recoPulse 1.3s infinite;
+}
+
+@keyframes recoPulse {
+  0% { transform: scale(1); text-shadow: 0 0 10px currentColor; }
+  50% { transform: scale(1.06); text-shadow: 0 0 20px currentColor; }
+  100% { transform: scale(1); text-shadow: 0 0 10px currentColor; }
+}
+
+/* Barrinha de confiança animando */
+.conf-bar-animate {
+  animation: fillBar 1.8s ease-out forwards;
+  width: 0%;
+}
+
+@keyframes fillBar {
+  to { width: var(--target-width); }
+}
+
+/* Ícone suave */
+.icon-float {
+  animation: floatIcon 2.2s infinite ease-in-out;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
