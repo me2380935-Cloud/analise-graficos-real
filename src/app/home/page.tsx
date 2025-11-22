@@ -8,7 +8,6 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Upload handler
   const handleUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -18,7 +17,6 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
-  // 🔥 ANALISAR E REDIRECIONAR PARA RESULTADO PREMIUM
   const analyzeChart = async () => {
     if (!image) {
       alert("Envie um gráfico primeiro!");
@@ -39,7 +37,6 @@ export default function Home() {
       if (data.error) {
         alert("Erro: " + data.error);
       } else {
-        // 🔥 Redireciona para /result-test com os dados premium
         const params = new URLSearchParams({
           reco: data.recommendation || "",
           conf: String(data.confidence || ""),
@@ -65,7 +62,6 @@ export default function Home() {
 
   return (
     <main className="page-container">
-      {/* HEADER */}
       <div className="card header-card">
         <div className="header-left">
           <div className="app-logo">📊</div>
@@ -79,7 +75,6 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* CAPTURAR GRÁFICO */}
       <div className="card main-card">
         <div className="card-header">
           <div>
@@ -100,7 +95,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ÁREA DE UPLOAD */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
@@ -114,7 +108,6 @@ export default function Home() {
           {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
-        {/* BOTÃO ANALISAR */}
         <button className="analisar-btn" onClick={analyzeChart}>
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
