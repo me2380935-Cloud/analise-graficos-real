@@ -1,5 +1,6 @@
 "use client";
 
+import "./animations.css";
 import { useSearchParams } from "next/navigation";
 import {
   ArrowUpCircle,
