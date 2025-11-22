@@ -1,5 +1,5 @@
 "use client";
-import "./home.css";
+
 import { useState } from "react";
 import { Upload } from "lucide-react";
 
