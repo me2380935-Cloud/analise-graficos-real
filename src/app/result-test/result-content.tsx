@@ -2,11 +2,7 @@
 
 import "./animations.css";
 import { useSearchParams } from "next/navigation";
-import {
-  ArrowUpCircle,
-  ArrowDownCircle,
-  Minus,
-} from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, MinusCircle } from "lucide-react";
 
 export default function ResultContent() {
   const params = useSearchParams();
@@ -31,75 +27,50 @@ export default function ResultContent() {
 
   const getIcon = () => {
     if (recommendation === "BUY")
-      return <ArrowUpCircle size={42} style={{ color: getColor() }} className="pulse" />;
+      return <ArrowUpCircle size={55} color="#00ff9d" className="icon-pulse" />;
     if (recommendation === "SELL")
-      return <ArrowDownCircle size={42} style={{ color: getColor() }} className="pulse" />;
-    return <Minus size={42} style={{ color: getColor() }} className="pulse" />;
+      return <ArrowDownCircle size={55} color="#ff4f4f" className="icon-pulse" />;
+    return <MinusCircle size={55} color="#ffd93b" className="icon-pulse" />;
   };
 
   return (
-    <main className="premium-bg fade-in"
-      style={{
-        minHeight: "100vh",
-        padding: "35px",
-        color: "white",
-        fontFamily: "Inter, sans-serif",
-      }}
-    >
-      {/* TÍTULO */}
-      <h1 className="title-glow">Resultado Premium 🔥</h1>
+    <main className="premium-page">
+      <h1 className="premium-title glow-text">Resultado Premium 🔥</h1>
 
-      {/* CARD PRINCIPAL */}
-      <div
-        className="premium-card scale-in"
-        style={{
-          border: `2px solid ${getColor()}`,
-          padding: "22px",
-          borderRadius: "18px",
-          marginBottom: "32px",
-        }}
-      >
-        {/* ÍCONE */}
-        <div style={{ marginBottom: "12px" }}>
-          {getIcon()}
-        </div>
+      {/* BLOCO DE RECOMENDAÇÃO - Glow Dinâmico + Fumaça */}
+      <div className="recommendation-card glow-dynamic">
 
-        <h2 style={{ fontSize: "22px", marginBottom: "8px" }}>Recomendação</h2>
+        {/* Fumaça */}
+        <div className="smoke"></div>
 
-        <p
-          className="pulse"
-          style={{
-            fontSize: "35px",
-            color: getColor(),
-            fontWeight: "bold",
-            marginBottom: "10px",
-          }}
-        >
+        <div className="rec-icon">{getIcon()}</div>
+
+        <h2 className="rec-title">Recomendação</h2>
+
+        <p className="rec-value" style={{ color: getColor() }}>
           {recommendation}
         </p>
 
-        {/* CONFIDENCE BAR */}
-        <p><b>Confiança:</b> {confidence}%</p>
+        <p className="rec-confidence">
+          Confiança: <b>{confidence}%</b>
+        </p>
       </div>
 
-      {/* DADOS DO MERCADO */}
-      <div className="fade-in" style={{ marginBottom: "15px" }}>
+      {/* DEMAIS INFO */}
+      <div className="info-container fade-in">
         <p><b>Tendência:</b> {trend}</p>
         <p><b>Risco:</b> {risk}</p>
         <p><b>Suporte:</b> {support}</p>
         <p><b>Resistência:</b> {resistance}</p>
-        <p><b>Ponto de Entrada:</b> {entry}</p>
-        <p><b>Stop Loss:</b> {stop}</p>
+        <p><b>Entrada:</b> {entry}</p>
+        <p><b>Stop:</b> {stop}</p>
         <p><b>Take Profit:</b> {take}</p>
-        <p><b>Timeframe:</b> {time}</p>
+        <p><b>Prazo:</b> {time}</p>
       </div>
 
-      {/* RESUMO INTELIGENTE */}
-      <div className="slide-up" style={{ marginTop: "25px" }}>
-        <h3 style={{ marginBottom: "10px", fontSize: "20px" }}>Resumo Inteligente</h3>
-        <p style={{ lineHeight: "1.6", opacity: 0.95 }}>
-          {analysis}
-        </p>
+      <div className="analysis-box slide-up">
+        <h3>Resumo Inteligente</h3>
+        <p>{analysis}</p>
       </div>
     </main>
   );
