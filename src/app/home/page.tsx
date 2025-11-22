@@ -63,8 +63,8 @@ export default function Home() {
   return (
     <main className="page-container">
       
-      {/* ===== HEADER ===== */}
-      <div className="header-card">
+      {/* CARD SUPERIOR */}
+      <div className="card header-card">
         <div className="header-left">
           <div className="app-logo">📊</div>
 
@@ -77,8 +77,8 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* ===== BLOCO DE CAPTURA ===== */}
-      <div className="main-card">
+      {/* CARD PRINCIPAL */}
+      <div className="card main-card">
         <div className="card-header">
           <div>
             <h2>Capturar</h2>
@@ -98,7 +98,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ===== UPLOAD AREA ===== */}
+        {/* ÁREA DE UPLOAD */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
@@ -107,12 +107,13 @@ export default function Home() {
           <p className="upload-text">
             {image ? "Imagem carregada!" : "Clique para fazer upload"}
           </p>
+
           <p className="upload-sub">PNG, JPG ou print de tela</p>
 
           {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
-        {/* ===== BOTÃO ANALISAR ===== */}
+        {/* BOTÃO ANALISAR */}
         <button className="analisar-btn" onClick={analyzeChart}>
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
