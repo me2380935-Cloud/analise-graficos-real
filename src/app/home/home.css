@@ -1,6 +1,6 @@
 /* ======== ESTILO PREMIUM NEON ======== */
 
-.home-container {
+.home-container { 
   min-height: 100vh;
   padding: 30px;
   background: radial-gradient(circle at top, #260043, #000000 80%);
