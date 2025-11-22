@@ -1,77 +1,111 @@
 /* ======== ESTILO PREMIUM NEON ======== */
 
-.home-container { 
+.page-container {
   min-height: 100vh;
   padding: 30px;
   background: radial-gradient(circle at top, #260043, #000000 80%);
   color: white;
   font-family: "Inter", sans-serif;
-  text-align: center;
 }
 
 /* HEADER */
-.home-header {
-  margin-bottom: 30px;
-}
-
-.brand-title {
-  font-size: 32px;
-  font-weight: 800;
-  color: #d56bff;
-  text-shadow: 0 0 15px #b244ff;
-}
-
-.brand-sub {
-  font-size: 16px;
-  opacity: 0.8;
-}
-
-/* CARD PRINCIPAL */
-.neon-card {
+.header-card {
   background: rgba(255, 255, 255, 0.04);
-  padding: 25px;
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 20px rgba(162, 0, 255, 0.3);
-  backdrop-filter: blur(8px);
-  animation: floatUp 0.8s ease-out;
-}
-
-.card-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #d56bff;
-}
-
-.card-sub {
-  margin-top: -10px;
-  margin-bottom: 20px;
-  opacity: 0.8;
-}
-
-/* UPLOAD BOX */
-.upload-box {
-  border: 2px dashed rgba(200, 120, 255, 0.7);
-  padding: 25px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.3s;
+  box-shadow: 0 0 25px rgba(162, 0, 255, 0.3);
+  padding: 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 
-.upload-box:hover {
-  background: rgba(255, 255, 255, 0.06);
-  transform: scale(1.03);
+.app-logo {
+  font-size: 40px;
+}
+
+.header-text h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.header-text p {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* BOTÃO */
+.modo-btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 2px solid #b244ff;
+  background: transparent;
+  color: #d56bff;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.modo-btn:hover {
+  background: rgba(178, 68, 255, 0.2);
+}
+
+/* CARD CAPTURA */
+.main-card {
+  margin-top: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  border: 2px solid rgba(172, 63, 255, 0.6);
+  box-shadow: 0 0 20px rgba(162, 0, 255, 0.2);
+  padding: 25px;
+}
+
+.card-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Upload */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.small-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #b244ff;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #e6baff;
+  transition: 0.3s;
+}
+
+.small-btn:hover {
+  background: rgba(178, 68, 255, 0.3);
+}
+
+/* UPLOAD BOX */
+.upload-area {
+  margin-top: 22px;
+  border: 2px dashed rgba(200, 120, 255, 0.7);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: 0.3s;
 }
 
 .upload-text {
-  margin-top: 10px;
+  margin-top: 12px;
+  color: #d8aaff;
+}
+
+.upload-sub {
+  font-size: 13px;
+  opacity: 0.7;
 }
 
 /* PREVIEW */
-.preview-image {
+.preview-img {
   width: 100%;
   margin-top: 20px;
   border-radius: 12px;
@@ -79,70 +113,21 @@
   box-shadow: 0 0 15px #b455ff;
 }
 
-/* BOTÃO */
-.neon-button {
+/* BOTÃO ANALISAR */
+.analisar-btn {
+  margin-top: 20px;
   width: 100%;
   padding: 14px;
-  margin-top: 25px;
   border-radius: 10px;
   background: linear-gradient(90deg, #a600ff, #5b009e);
   color: white;
   font-weight: 700;
-  font-size: 17px;
   border: none;
-  cursor: pointer;
+  font-size: 17px;
   transition: 0.3s;
 }
 
-.neon-button:hover {
-  transform: scale(1.05);
+.analisar-btn:hover {
+  transform: scale(1.03);
   box-shadow: 0 0 20px #c45aff;
-}
-
-/* ===== ANIMAÇÕES ===== */
-
-.fade-in {
-  animation: fadeIn 0.8s ease-in-out both;
-}
-
-.float-up {
-  animation: floatUp 1s ease-out both;
-}
-
-.glow-pulse {
-  animation: glowPulse 2.2s infinite ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes floatUp {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes glowPulse {
-  0% {
-    box-shadow: 0 0 8px #c45aff;
-  }
-  50% {
-    box-shadow: 0 0 20px #d56bff;
-  }
-  100% {
-    box-shadow: 0 0 8px #c45aff;
-  }
 }
