@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-// Import all available fonts for AI usage
 import "../lib/fonts";
 
 const geistSans = Geist({
@@ -39,4 +38,5 @@ export default function RootLayout({
     </html>
   );
 }
-{/* atualização obrigatória para Vercel */}
+
+// atualização obrigatória para Vercel
