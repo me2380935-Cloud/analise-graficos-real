@@ -1,117 +1,108 @@
 "use client";
-
 import "./home.css";
-import { useRouter } from "next/navigation";
-import { Upload, Camera, Save, Play } from "lucide-react";
+import { useState } from "react";
+import { Upload } from "lucide-react";
 
-export default function HomePage() {
-  const router = useRouter();
+export default function Home() {
+  const [image, setImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const goToAnalyze = () => router.push("/home"); // mantém /home como rota funcional
-  const goToResult = () => router.push("/result-test");
+  const handleUpload = (e: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const analyzeChart = async () => {
+    if (!image) {
+      alert("Envie um gráfico primeiro!");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const resp = await fetch("/api/analyze-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image }),
+      });
+
+      const data = await resp.json();
+
+      if (data.error) {
+        alert("Erro: " + data.error);
+      } else {
+        const params = new URLSearchParams({
+          reco: data.recommendation || "",
+          conf: String(data.confidence || ""),
+          trend: data.trend || "",
+          analysis: data.analysis || "",
+          risk: data.riskLevel || "",
+          support: data.support || "",
+          resistance: data.resistance || "",
+          entry: data.entryPoint || "",
+          stop: data.stopLoss || "",
+          take: data.takeProfit || "",
+          time: data.timeframe || "",
+        });
+
+        window.location.href = `/result-test?${params.toString()}`;
+      }
+    } catch (e) {
+      alert("Erro ao analisar.");
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <main className="home-root">
-      <header className="home-header">
-        <div className="brand">
-          <div className="brand-icon">📊</div>
-          <div className="brand-text">
-            <h1>TradeVision AI</h1>
-            <p>Análise Inteligente de Mercado</p>
-          </div>
-        </div>
+    <main className="home-container">
 
-        <div className="header-actions">
-          <button className="mode-btn">Modo</button>
-        </div>
-      </header>
+      {/* LOGO / HEADER */}
+      <div className="home-header fade-in">
+        <h1 className="brand-title">TradeVision AI</h1>
+        <p className="brand-sub">Análise Inteligente de Mercado</p>
+      </div>
 
-      <section className="hero">
-        <div className="hero-left">
-          <h2 className="hero-title">Capture — Analise — Decida</h2>
-          <p className="hero-sub">
-            Faça upload ou tire uma foto do gráfico. Receba uma análise premium com
-            recomendação, confiança e estratégia.
+      {/* CARD PRINCIPAL */}
+      <div className="card neon-card float-up">
+
+        <h2 className="card-title">Enviar Gráfico</h2>
+        <p className="card-sub">PNG, JPG ou Print de Tela</p>
+
+        {/* UPLOAD */}
+        <label className="upload-box glow-pulse">
+          <Upload size={42} color="#ffffff" />
+          <p className="upload-text">
+            {image ? "Imagem carregada!" : "Toque para enviar"}
           </p>
 
-          <div className="hero-actions">
-            <label className="btn btn-outline">
-              <Upload size={18} />
-              <span>Upload</span>
-              <input type="file" accept="image/*" hidden />
-            </label>
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={handleUpload}
+          />
+        </label>
 
-            <label className="btn btn-outline">
-              <Camera size={18} />
-              <span>Tirar Foto</span>
-              <input type="file" accept="image/*" capture="environment" hidden />
-            </label>
+        {/* PREVIEW DA IMAGEM */}
+        {image && (
+          <img src={image} alt="preview" className="preview-image fade-in" />
+        )}
 
-            <button className="btn btn-primary" onClick={goToAnalyze}>
-              <Play size={18} />
-              <span>Analisar Gráfico</span>
-            </button>
-          </div>
+        {/* BOTÃO ANALISAR */}
+        <button
+          className="analyze-btn neon-button glow-pulse"
+          onClick={analyzeChart}
+        >
+          {loading ? "Analisando..." : "Analisar Gráfico"}
+        </button>
 
-          <div className="features">
-            <div className="feature">
-              <strong>Tendência</strong>
-              <span>Alta / Baixa / Lateral</span>
-            </div>
-            <div className="feature">
-              <strong>Indicadores</strong>
-              <span>RSI, MACD, Médias</span>
-            </div>
-            <div className="feature">
-              <strong>Confiança</strong>
-              <span>Score %</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero-right">
-          {/* imagem de referência (transforme o caminho local em URL no deploy) */}
-          <div className="mockup-card">
-            <img
-              src="/mnt/data/355717B9-F8B6-4845-B372-4D91C5A067F7.jpeg"
-              alt="mockup"
-              className="mockup-img"
-            />
-            <div className="mockup-overlay">
-              <div className="mockup-glow" />
-              <div className="mockup-info">
-                <p className="mini-title">Preview do Gráfico</p>
-                <div className="mini-actions">
-                  <button className="mini-btn green">Compra</button>
-                  <button className="mini-btn red">Venda</button>
-                  <button className="mini-btn yellow">Salvar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="cards">
-        <div className="card">
-          <h3>Resumo Inteligente</h3>
-          <p>Resumo rápido da análise e pontos principais, otimizado para decisões rápidas.</p>
-        </div>
-
-        <div className="card">
-          <h3>Suporte & Resistência</h3>
-          <p>Níveis calculados automaticamente com confiança e sinais técnicos.</p>
-        </div>
-
-        <div className="card">
-          <h3>Estratégias</h3>
-          <p>Entrada, stop loss e take profit sugeridos com timeframe recomendado.</p>
-        </div>
-      </section>
-
-      <footer className="home-footer">
-        <p>© TradeVision AI • Desenvolvido por você</p>
-      </footer>
+      </div>
     </main>
   );
 }
