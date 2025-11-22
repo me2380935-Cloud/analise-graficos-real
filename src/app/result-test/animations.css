@@ -1,51 +1,128 @@
+/* ==== FADE-IN SUAVE ==== */
 .fade-in {
-  animation: fadeIn 0.7s ease-out forwards;
+  animation: fadeIn 0.8s ease-out forwards;
   opacity: 0;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* BRILHO pulsante ao redor do card */
-.premium-glow {
-  animation: glowPulse 2.5s infinite ease-in-out;
+/* ==== SCALE-IN (ENTRADA DO CARD) ==== */
+.scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==== PULSO NEON NA RECOMENDAÇÃO ==== */
+.pulse {
+  animation: pulseGlow 1.4s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow: 0 0 25px currentColor;
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 10px currentColor;
+  }
+}
+
+/* ==== TÍTULO PREMIUM ==== */
+.title-glow {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 12px #a855f7, 0 0 25px #a855f7;
+  animation: titleGlowPulse 2s infinite;
+}
+
+@keyframes titleGlowPulse {
+  0% {
+    text-shadow: 0 0 12px #a855f7, 0 0 25px #a855f7;
+  }
+  50% {
+    text-shadow: 0 0 22px #c084fc, 0 0 40px #bf6fff;
+  }
+  100% {
+    text-shadow: 0 0 12px #a855f7, 0 0 25px #a855f7;
+  }
+}
+
+/* ==== BACKGROUND PREMIUM ANIMADO ==== */
+.premium-bg {
+  background: radial-gradient(circle at top, #220044, #000000);
+  animation: bgShift 7s infinite alternate ease-in-out;
+}
+
+@keyframes bgShift {
+  0% {
+    background: radial-gradient(circle at top, #220044, #000000);
+  }
+  100% {
+    background: radial-gradient(circle at center, #330066, #000000);
+  }
+}
+
+/* ==== CARD PREMIUM ==== */
+.premium-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  animation: glowPulse 3s infinite ease-in-out;
 }
 
 @keyframes glowPulse {
-  0% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
-  50% { box-shadow: 0 0 25px rgba(168, 85, 247, 0.9); }
-  100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+  0% {
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+  }
 }
 
-/* PULSE neon na recomendação */
-.reco-pulse {
-  animation: recoPulse 1.3s infinite;
+/* ==== ELEMENTOS SUBINDO SUAVEMENTE ==== */
+.slide-up {
+  animation: slideUp 0.9s ease-out forwards;
+  opacity: 0;
 }
 
-@keyframes recoPulse {
-  0% { transform: scale(1); text-shadow: 0 0 10px currentColor; }
-  50% { transform: scale(1.06); text-shadow: 0 0 20px currentColor; }
-  100% { transform: scale(1); text-shadow: 0 0 10px currentColor; }
-}
-
-/* Barrinha de confiança animando */
-.conf-bar-animate {
-  animation: fillBar 1.8s ease-out forwards;
-  width: 0%;
-}
-
-@keyframes fillBar {
-  to { width: var(--target-width); }
-}
-
-/* Ícone suave */
-.icon-float {
-  animation: floatIcon 2.2s infinite ease-in-out;
-}
-
-@keyframes floatIcon {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
