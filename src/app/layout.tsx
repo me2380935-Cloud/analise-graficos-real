@@ -39,3 +39,4 @@ export default function RootLayout({
     </html>
   );
 }
+{/* atualização obrigatória para Vercel */}
