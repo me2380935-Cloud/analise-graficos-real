@@ -1,104 +1,148 @@
- /* HOME PREMIUM - Neon roxo + preto */
+/* ======== ESTILO PREMIUM NEON ======== */
 
-/* variável de cor principal */
-:root{
-  --neon: #a855f7;
-  --neon-strong: #b86bff;
-  --bg-1: #0b0014;
-  --bg-2: #120022;
-  --card-bg: rgba(255,255,255,0.04);
+.home-container {
+  min-height: 100vh;
+  padding: 30px;
+  background: radial-gradient(circle at top, #260043, #000000 80%);
+  color: white;
+  font-family: "Inter", sans-serif;
+  text-align: center;
 }
 
-/* layout base */
-.home-root{
-  min-height:100vh;
-  background: radial-gradient(circle at 10% 10%, #1a0033 0%, #000 60%);
-  color:#fff;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  padding:28px;
-  display:flex;
-  flex-direction:column;
+/* HEADER */
+.home-header {
+  margin-bottom: 30px;
 }
 
-/* header */
-.home-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-.brand{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-.brand-icon{
-  width:48px;height:48px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,var(--neon),#5a00c9);
-  box-shadow:0 6px 24px rgba(168,85,247,0.16);
-  font-size:22px;
-}
-.brand-text h1{margin:0;font-size:18px;letter-spacing:0.2px;}
-.brand-text p{margin:0;font-size:12px;opacity:0.8;}
-
-/* buttons header */
-.mode-btn{
-  padding:8px 12px;border-radius:8px;border:none;
-  background:rgba(255,255,255,0.03);color:#fff;
-  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+.brand-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #d56bff;
+  text-shadow: 0 0 15px #b244ff;
 }
 
-/* hero */
-.hero{display:flex;gap:28px;align-items:center;margin-bottom:26px;}
-.hero-left{flex:1;max-width:680px;}
-.hero-right{width:420px;display:flex;justify-content:center;align-items:center;}
-
-/* titles */
-.hero-title{font-size:34px;margin:0 0 10px 0;text-shadow:0 0 18px rgba(168,85,247,0.12);}
-.hero-sub{margin:0 0 18px 0;opacity:0.85;}
-
-/* action buttons */
-.hero-actions{display:flex;gap:12px;align-items:center;margin-bottom:20px;}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;cursor:pointer;border:none;}
-.btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;backdrop-filter:blur(4px);}
-.btn-primary{background:linear-gradient(90deg,var(--neon),var(--neon-strong));box-shadow:0 8px 30px rgba(168,85,247,0.18);color:#fff;}
-
-/* features */
-.features{display:flex;gap:12px;margin-top:8px;}
-.feature{background:var(--card-bg);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);min-width:170px;}
-
-/* mockup card */
-.mockup-card{width:360px;height:220px;border-radius:14px;overflow:hidden;position:relative;border:2px solid rgba(168,85,247,0.08);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 12px 40px rgba(10,0,20,0.6);}
-.mockup-img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05) saturate(1.05);}
-.mockup-overlay{position:absolute;inset:0;pointer-events:none;}
-.mockup-glow{position:absolute;inset:0;background:radial-gradient(circle at 20% 10%, rgba(168,85,247,0.08), transparent 30%);mix-blend-mode:screen;}
-.mockup-info{position:absolute;left:12px;bottom:12px;color:#fff;pointer-events:auto;display:flex;align-items:center;gap:10px;}
-.mini-title{font-size:12px;margin:0 0 6px 0;}
-.mini-actions{display:flex;gap:8px;}
-.mini-btn{padding:6px 10px;border-radius:8px;border:none;font-size:13px;cursor:pointer;}
-.mini-btn.green{background:#00ff9d;color:#021;box-shadow:0 6px 18px rgba(0,255,157,0.12);}
-.mini-btn.red{background:#ff4f4f;color:#2b0000;box-shadow:0 6px 18px rgba(255,79,79,0.12);}
-.mini-btn.yellow{background:#ffd93b;color:#2b2000;box-shadow:0 6px 18px rgba(255,210,59,0.10);}
-
-/* cards area */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px;}
-.card{background:var(--card-bg);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 20px rgba(0,0,0,0.6);}
-
-/* footer */
-.home-footer{margin-top:28px;text-align:center;opacity:0.6;font-size:13px;}
-
-/* small animations */
-@keyframes floaty {
-  0%{transform:translateY(0px);}
-  50%{transform:translateY(-6px);}
-  100%{transform:translateY(0px);}
+.brand-sub {
+  font-size: 16px;
+  opacity: 0.8;
 }
-.mockup-card{animation:floaty 6s ease-in-out infinite;}
 
-/* responsiveness */
-@media (max-width:980px){
-  .hero{flex-direction:column;}
-  .hero-right{width:100%;}
-  .hero-left{max-width:100%;}
+/* CARD PRINCIPAL */
+.neon-card {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 25px;
+  border-radius: 18px;
+  border: 2px solid rgba(172, 63, 255, 0.6);
+  box-shadow: 0 0 20px rgba(162, 0, 255, 0.3);
+  backdrop-filter: blur(8px);
+  animation: floatUp 0.8s ease-out;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #d56bff;
+}
+
+.card-sub {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+/* UPLOAD BOX */
+.upload-box {
+  border: 2px dashed rgba(200, 120, 255, 0.7);
+  padding: 25px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-box:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: scale(1.03);
+}
+
+.upload-text {
+  margin-top: 10px;
+}
+
+/* PREVIEW */
+.preview-image {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: 2px solid #b455ff;
+  box-shadow: 0 0 15px #b455ff;
+}
+
+/* BOTÃO */
+.neon-button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 25px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #a600ff, #5b009e);
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.neon-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #c45aff;
+}
+
+/* ===== ANIMAÇÕES ===== */
+
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out both;
+}
+
+.float-up {
+  animation: floatUp 1s ease-out both;
+}
+
+.glow-pulse {
+  animation: glowPulse 2.2s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 8px #c45aff;
+  }
+  50% {
+    box-shadow: 0 0 20px #d56bff;
+  }
+  100% {
+    box-shadow: 0 0 8px #c45aff;
+  }
 }
