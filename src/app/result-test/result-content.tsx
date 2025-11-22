@@ -31,37 +31,38 @@ export default function ResultContent() {
 
   return (
     <main
+      className="premium-bg fade-in"
       style={{
         minHeight: "100vh",
         padding: "30px",
-        background: "radial-gradient(circle at top, #1a0033, #000)",
         color: "white",
         fontFamily: "Inter, sans-serif",
       }}
     >
-      <h1
-        style={{
-          fontSize: "28px",
-          fontWeight: "bold",
-          marginBottom: "20px",
-          textShadow: "0 0 15px #a855f7",
-        }}
-      >
+      <h1 className="title-glow">
         Resultado Premium 🔥
       </h1>
 
+      {/* CARD DE RECOMENDAÇÃO */}
       <div
+        className="premium-card scale-in"
         style={{
           border: `2px solid ${getColor()}`,
           padding: "20px",
           borderRadius: "15px",
           marginBottom: "25px",
-          background: "rgba(255,255,255,0.05)",
         }}
       >
         <h2 style={{ fontSize: "22px", marginBottom: "10px" }}>Recomendação</h2>
 
-        <p style={{ fontSize: "30px", color: getColor(), fontWeight: "bold" }}>
+        <p
+          className="pulse"
+          style={{
+            fontSize: "30px",
+            color: getColor(),
+            fontWeight: "bold",
+          }}
+        >
           {recommendation}
         </p>
 
@@ -70,6 +71,7 @@ export default function ResultContent() {
         </p>
       </div>
 
+      {/* DADOS */}
       <p><b>Tendência:</b> {trend}</p>
       <p><b>Risco:</b> {risk}</p>
       <p><b>Suporte:</b> {support}</p>
@@ -79,7 +81,8 @@ export default function ResultContent() {
       <p><b>Take Profit:</b> {take}</p>
       <p><b>Prazo:</b> {time}</p>
 
-      <div style={{ marginTop: "20px" }}>
+      {/* RESUMO FINAL */}
+      <div className="slide-up" style={{ marginTop: "20px" }}>
         <h3 style={{ marginBottom: "10px" }}>Resumo Inteligente</h3>
         <p>{analysis}</p>
       </div>
