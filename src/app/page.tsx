@@ -4,4 +4,3 @@ export default function Page() {
   redirect("/home");
   return null;
 }
- // atualização forçada
