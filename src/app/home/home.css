@@ -8,16 +8,17 @@
   font-family: "Inter", sans-serif;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header-card {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 25px rgba(162, 0, 255, 0.3);
-  padding: 20px;
+  box-shadow: 0 0 25px rgba(162, 0, 255, 0.35);
+  padding: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 18px;
 }
 
 .app-logo {
@@ -25,7 +26,7 @@
 }
 
 .header-text h1 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
 }
 
@@ -34,7 +35,7 @@
   opacity: 0.7;
 }
 
-/* BOTÃO */
+/* ===== BOTÃO DO TOPO ===== */
 .modo-btn {
   padding: 10px 22px;
   border-radius: 12px;
@@ -49,14 +50,24 @@
   background: rgba(178, 68, 255, 0.2);
 }
 
-/* CARD CAPTURA */
+/* ===== CARD PRINCIPAL ===== */
 .main-card {
-  margin-top: 18px;
+  margin-top: 12px;
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 20px rgba(162, 0, 255, 0.2);
-  padding: 25px;
+  box-shadow: 0 0 25px rgba(162, 0, 255, 0.25);
+  padding: 28px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* AUMENTAMOS O ESPAÇO LATERAL DOS BOTÕES */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
 }
 
 .card-header h2 {
@@ -64,34 +75,41 @@
   font-weight: 700;
 }
 
-/* Upload */
+/* ===== BOTÕES UPLOAD ===== */
 .action-buttons {
   display: flex;
-  gap: 12px;
+  gap: 14px;
 }
 
 .small-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #b244ff;
-  padding: 8px 16px;
-  border-radius: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
   font-size: 15px;
   color: #e6baff;
   transition: 0.3s;
+  width: 85px;
+  text-align: center;
 }
 
 .small-btn:hover {
   background: rgba(178, 68, 255, 0.3);
 }
 
-/* UPLOAD BOX */
+/* ===== ÁREA DE UPLOAD ===== */
 .upload-area {
   margin-top: 22px;
   border: 2px dashed rgba(200, 120, 255, 0.7);
-  padding: 30px;
+  padding: 35px;
   border-radius: 15px;
   text-align: center;
   transition: 0.3s;
+}
+
+.upload-area:hover {
+  background: rgba(255,255,255,0.05);
+  transform: scale(1.02);
 }
 
 .upload-text {
@@ -110,24 +128,39 @@
   margin-top: 20px;
   border-radius: 12px;
   border: 2px solid #b455ff;
-  box-shadow: 0 0 15px #b455ff;
+  box-shadow: 0 0 20px #b455ff;
 }
 
-/* BOTÃO ANALISAR */
+/* ===== BOTÃO ANALISAR — PULSANTE ===== */
 .analisar-btn {
-  margin-top: 20px;
+  margin-top: 24px;
   width: 100%;
-  padding: 14px;
-  border-radius: 10px;
+  padding: 15px;
+  border-radius: 12px;
   background: linear-gradient(90deg, #a600ff, #5b009e);
   color: white;
   font-weight: 700;
   border: none;
-  font-size: 17px;
+  font-size: 18px;
   transition: 0.3s;
+  animation: pulseGlow 2.2s infinite ease-in-out;
 }
 
+/* HOVER */
 .analisar-btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 20px #c45aff;
+  transform: scale(1.04);
+  box-shadow: 0 0 25px #c45aff;
+}
+
+/* ===== ANIMAÇÃO DO BOTÃO PULSANTE ===== */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 10px #c45aff;
+  }
+  50% {
+    box-shadow: 0 0 28px #d56bff;
+  }
+  100% {
+    box-shadow: 0 0 10px #c45aff;
+  }
 }
