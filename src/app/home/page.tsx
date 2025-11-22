@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import "./home.css";
 
 import { useState } from "react";
