@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import {
   ArrowUpCircle,
   ArrowDownCircle,
-  Timer,
+  Minus,
 } from "lucide-react";
 
 export default function ResultContent() {
@@ -29,62 +29,77 @@ export default function ResultContent() {
     return "#ffd93b";
   };
 
+  const getIcon = () => {
+    if (recommendation === "BUY")
+      return <ArrowUpCircle size={42} style={{ color: getColor() }} className="pulse" />;
+    if (recommendation === "SELL")
+      return <ArrowDownCircle size={42} style={{ color: getColor() }} className="pulse" />;
+    return <Minus size={42} style={{ color: getColor() }} className="pulse" />;
+  };
+
   return (
-    <main
-      className="premium-bg fade-in"
+    <main className="premium-bg fade-in"
       style={{
         minHeight: "100vh",
-        padding: "30px",
+        padding: "35px",
         color: "white",
         fontFamily: "Inter, sans-serif",
       }}
     >
-      <h1 className="title-glow">
-        Resultado Premium 🔥
-      </h1>
+      {/* TÍTULO */}
+      <h1 className="title-glow">Resultado Premium 🔥</h1>
 
-      {/* CARD DE RECOMENDAÇÃO */}
+      {/* CARD PRINCIPAL */}
       <div
         className="premium-card scale-in"
         style={{
           border: `2px solid ${getColor()}`,
-          padding: "20px",
-          borderRadius: "15px",
-          marginBottom: "25px",
+          padding: "22px",
+          borderRadius: "18px",
+          marginBottom: "32px",
         }}
       >
-        <h2 style={{ fontSize: "22px", marginBottom: "10px" }}>Recomendação</h2>
+        {/* ÍCONE */}
+        <div style={{ marginBottom: "12px" }}>
+          {getIcon()}
+        </div>
+
+        <h2 style={{ fontSize: "22px", marginBottom: "8px" }}>Recomendação</h2>
 
         <p
           className="pulse"
           style={{
-            fontSize: "30px",
+            fontSize: "35px",
             color: getColor(),
             fontWeight: "bold",
+            marginBottom: "10px",
           }}
         >
           {recommendation}
         </p>
 
-        <p style={{ marginTop: "10px" }}>
-          Confiança: <b>{confidence}%</b>
-        </p>
+        {/* CONFIDENCE BAR */}
+        <p><b>Confiança:</b> {confidence}%</p>
       </div>
 
-      {/* DADOS */}
-      <p><b>Tendência:</b> {trend}</p>
-      <p><b>Risco:</b> {risk}</p>
-      <p><b>Suporte:</b> {support}</p>
-      <p><b>Resistência:</b> {resistance}</p>
-      <p><b>Entrada:</b> {entry}</p>
-      <p><b>Stop:</b> {stop}</p>
-      <p><b>Take Profit:</b> {take}</p>
-      <p><b>Prazo:</b> {time}</p>
+      {/* DADOS DO MERCADO */}
+      <div className="fade-in" style={{ marginBottom: "15px" }}>
+        <p><b>Tendência:</b> {trend}</p>
+        <p><b>Risco:</b> {risk}</p>
+        <p><b>Suporte:</b> {support}</p>
+        <p><b>Resistência:</b> {resistance}</p>
+        <p><b>Ponto de Entrada:</b> {entry}</p>
+        <p><b>Stop Loss:</b> {stop}</p>
+        <p><b>Take Profit:</b> {take}</p>
+        <p><b>Timeframe:</b> {time}</p>
+      </div>
 
-      {/* RESUMO FINAL */}
-      <div className="slide-up" style={{ marginTop: "20px" }}>
-        <h3 style={{ marginBottom: "10px" }}>Resumo Inteligente</h3>
-        <p>{analysis}</p>
+      {/* RESUMO INTELIGENTE */}
+      <div className="slide-up" style={{ marginTop: "25px" }}>
+        <h3 style={{ marginBottom: "10px", fontSize: "20px" }}>Resumo Inteligente</h3>
+        <p style={{ lineHeight: "1.6", opacity: 0.95 }}>
+          {analysis}
+        </p>
       </div>
     </main>
   );
