@@ -19,22 +19,23 @@ export async function POST(req: Request) {
       );
     }
 
-    // PROMPT PREMIUM (nível mais alto possível)
+    // ===== PROMPT PREMIUM =====
     const systemPrompt = `
-Você é um analista técnico profissional nível institucional. 
-Use Price Action + padrões de candle + estrutura de mercado + análise multi-indicadores (RSI, MACD, MME/EMA, OBV, VWAP, Suporte/Resistência, Tendência, Momentum).
+Você é um analista técnico profissional nível institucional.
+Use Price Action + padrões de candle + estrutura de mercado + análise multi-indicadores
+(RSI, MACD, MME/EMA, OBV, VWAP, Suporte/Resistência, Tendência, Momentum).
 
 Sua missão:
-1. Detectar os candles do gráfico com máxima precisão.
-2. Analisar mercado com metodologia profissional.
-3. Retornar APENAS JSON válido, no formato:
+1. Detectar candles do gráfico com máxima precisão.
+2. Fazer análise institucional.
+3. Retornar APENAS JSON no formato:
 
 {
   "recommendation": "BUY" | "SELL" | "HOLD",
   "confidence": número 0-100,
   "trend": "Alta" | "Baixa" | "Lateral",
-  "support": "valor numérico",
-  "resistance": "valor numérico",
+  "support": "valor",
+  "resistance": "valor",
   "indicators": [
     { "name": "RSI", "value": "valor", "signal": "bullish|bearish|neutral" },
     { "name": "MACD", "value": "descrição", "signal": "bullish|bearish|neutral" },
@@ -43,9 +44,9 @@ Sua missão:
   ],
   "analysis": "resumo profissional 2–3 frases",
   "riskLevel": "low" | "medium" | "high",
-  "entryPoint": "valor recomendado",
-  "stopLoss": "stop sugerido",
-  "takeProfit": "alvo sugerido",
+  "entryPoint": "valor",
+  "stopLoss": "valor",
+  "takeProfit": "valor",
   "timeframe": "curto | médio | longo prazo",
   "marketContext": "análise complementar"
 }
@@ -54,8 +55,9 @@ NUNCA retorne texto fora de JSON.
 Apenas JSON puro.
     `;
 
+    // ===== CORREÇÃO PRINCIPAL: MODELO CERTO =====
     const body = {
-      model: "gpt-4o",
+      model: "gpt-4o-mini", // <-- modelo correto para visão!
       messages: [
         { role: "system", content: systemPrompt },
         {
@@ -67,7 +69,10 @@ Apenas JSON puro.
             },
             {
               type: "image_url",
-              image_url: { url: image, detail: "high" }
+              image_url: {
+                url: image,
+                detail: "high"
+              }
             }
           ]
         }
@@ -95,10 +100,9 @@ Apenas JSON puro.
       );
     }
 
-    // Remove blocos markdown caso existam
+    // Remove trechos markdown
     const cleaned = raw.replace(/```json|```/g, "").trim();
 
-    // Parse final
     const json = JSON.parse(cleaned);
 
     return NextResponse.json(json);
