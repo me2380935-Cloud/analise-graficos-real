@@ -2,7 +2,7 @@
 
 .page-container {
   min-height: 100vh;
-  padding: 22px;
+  padding: 30px 26px; /* padding lateral aumentado */
   background: radial-gradient(circle at top, #260043, #000000 80%);
   color: white;
   font-family: "Inter", sans-serif;
@@ -14,7 +14,7 @@
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
   box-shadow: 0 0 25px rgba(162, 0, 255, 0.3);
-  padding: 25px;
+  padding: 22px 26px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,31 +24,48 @@
   font-size: 40px;
 }
 
-/* CARD CAPTURA */
+.header-text h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.header-text p {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* BOTÃO MODO (CORRIGIDO) */
+.header-card .modo-btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 2px solid #b244ff !important;
+  background: transparent !important;
+  color: #d56bff !important;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.header-card .modo-btn:hover {
+  background: rgba(178, 68, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+/* CARD PRINCIPAL */
 .main-card {
   margin-top: 20px;
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
-  box-shadow: 0 0 22px rgba(162, 0, 255, 0.25);
-  padding: 26px;
-
-  /* 🎯 AQUI ENTRA A CORREÇÃO QUE AJUSTA OS BOTÕES */
-  padding-left: 28px;
-  padding-right: 28px;
+  box-shadow: 0 0 20px rgba(162, 0, 255, 0.2);
+  padding: 30px 26px !important; /* padding lateral reforçado */
 }
 
-/* CABEÇALHO DO CARD */
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  /* 🎯 ISSO CRIA ESPAÇAMENTO INTERNO PARA OS BOTÕES */
-  padding-right: 8px;
+.card-header h2 {
+  font-size: 22px;
+  font-weight: 700;
 }
 
-/* Upload Buttons */
+/* Upload buttons */
 .action-buttons {
   display: flex;
   gap: 14px;
@@ -57,24 +74,35 @@
 .small-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #b244ff;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 8px 18px;
+  border-radius: 10px;
   font-size: 15px;
   color: #e6baff;
   transition: 0.3s;
 }
 
 .small-btn:hover {
-  background: rgba(178, 68, 255, 0.32);
+  background: rgba(178, 68, 255, 0.3);
 }
 
-/* UPLOAD BOX */
+/* UPLOAD AREA */
 .upload-area {
-  margin-top: 20px;
+  margin-top: 22px;
   border: 2px dashed rgba(200, 120, 255, 0.7);
-  padding: 35px;
+  padding: 32px;
   border-radius: 15px;
   text-align: center;
+  transition: 0.3s;
+}
+
+.upload-text {
+  margin-top: 12px;
+  color: #d8aaff;
+}
+
+.upload-sub {
+  font-size: 13px;
+  opacity: 0.7;
 }
 
 /* PREVIEW */
@@ -86,25 +114,36 @@
   box-shadow: 0 0 15px #b455ff;
 }
 
-/* BOTÃO ANALISAR (Versão pulsante + neon) */
+/* BOTÃO ANALISAR — PULSANTE */
 .analisar-btn {
-  margin-top: 20px;
+  margin-top: 22px;
   width: 100%;
   padding: 16px;
   border-radius: 12px;
-  background: linear-gradient(90deg, #c800ff, #7000d4);
+  background: linear-gradient(90deg, #a600ff, #5b009e);
   color: white;
   font-weight: 700;
   border: none;
-  font-size: 18px;
-  transition: 0.25s;
-  
-  box-shadow: 0 0 18px #a020f0;
-  animation: pulseGlow 2.3s infinite ease-in-out;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.3s;
+  animation: pulseGlow 2s infinite ease-in-out;
 }
 
+.analisar-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 22px #c45aff;
+}
+
+/* Animação neon do botão */
 @keyframes pulseGlow {
-  0% { transform: scale(1); box-shadow: 0 0 12px #a020f0; }
-  50% { transform: scale(1.04); box-shadow: 0 0 26px #d580ff; }
-  100% { transform: scale(1); box-shadow: 0 0 12px #a020f0; }
+  0% {
+    box-shadow: 0 0 8px #c45aff;
+  }
+  50% {
+    box-shadow: 0 0 22px #e17fff;
+  }
+  100% {
+    box-shadow: 0 0 8px #c45aff;
+  }
 }
