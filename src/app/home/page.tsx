@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import "./home.css";
 
 import { useState } from "react";
@@ -62,7 +62,9 @@ export default function Home() {
 
   return (
     <main className="page-container">
-      <div className="card header-card">
+      
+      {/* ===== HEADER ===== */}
+      <div className="header-card">
         <div className="header-left">
           <div className="app-logo">📊</div>
 
@@ -75,7 +77,8 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      <div className="card main-card">
+      {/* ===== BLOCO DE CAPTURA ===== */}
+      <div className="main-card">
         <div className="card-header">
           <div>
             <h2>Capturar</h2>
@@ -95,6 +98,7 @@ export default function Home() {
           </div>
         </div>
 
+        {/* ===== UPLOAD AREA ===== */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
@@ -108,6 +112,7 @@ export default function Home() {
           {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
+        {/* ===== BOTÃO ANALISAR ===== */}
         <button className="analisar-btn" onClick={analyzeChart}>
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
