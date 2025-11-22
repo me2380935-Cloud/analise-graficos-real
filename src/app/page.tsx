@@ -1,122 +1,117 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-export default function SplashScreen() {
+import "./home.css";
+import { useRouter } from "next/navigation";
+import { Upload, Camera, Save, Play } from "lucide-react";
+
+export default function HomePage() {
   const router = useRouter();
 
-  // Redirecionamento automático
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push("/home");
-    }, 2500); // 2.5s
-
-    return () => clearTimeout(timer);
-  }, [router]);
+  const goToAnalyze = () => router.push("/home"); // mantém /home como rota funcional
+  const goToResult = () => router.push("/result-test");
 
   return (
-    <div style={styles.container}>
-      {/* LOGO */}
-      <div style={styles.logoWrapper}>
-        <div style={styles.logoGlow} />
-        <img
-          src="/icon.svg" // você pode trocar pela logo premium futuramente
-          alt="logo"
-          style={styles.logo}
-        />
-      </div>
+    <main className="home-root">
+      <header className="home-header">
+        <div className="brand">
+          <div className="brand-icon">📊</div>
+          <div className="brand-text">
+            <h1>TradeVision AI</h1>
+            <p>Análise Inteligente de Mercado</p>
+          </div>
+        </div>
 
-      {/* TÍTULO */}
-      <h1 style={styles.title}>TradeVision AI</h1>
+        <div className="header-actions">
+          <button className="mode-btn">Modo</button>
+        </div>
+      </header>
 
-      {/* SUBTÍTULO */}
-      <p style={styles.subtitle}>Análise Inteligente de Mercado</p>
-    </div>
+      <section className="hero">
+        <div className="hero-left">
+          <h2 className="hero-title">Capture — Analise — Decida</h2>
+          <p className="hero-sub">
+            Faça upload ou tire uma foto do gráfico. Receba uma análise premium com
+            recomendação, confiança e estratégia.
+          </p>
+
+          <div className="hero-actions">
+            <label className="btn btn-outline">
+              <Upload size={18} />
+              <span>Upload</span>
+              <input type="file" accept="image/*" hidden />
+            </label>
+
+            <label className="btn btn-outline">
+              <Camera size={18} />
+              <span>Tirar Foto</span>
+              <input type="file" accept="image/*" capture="environment" hidden />
+            </label>
+
+            <button className="btn btn-primary" onClick={goToAnalyze}>
+              <Play size={18} />
+              <span>Analisar Gráfico</span>
+            </button>
+          </div>
+
+          <div className="features">
+            <div className="feature">
+              <strong>Tendência</strong>
+              <span>Alta / Baixa / Lateral</span>
+            </div>
+            <div className="feature">
+              <strong>Indicadores</strong>
+              <span>RSI, MACD, Médias</span>
+            </div>
+            <div className="feature">
+              <strong>Confiança</strong>
+              <span>Score %</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-right">
+          {/* imagem de referência (transforme o caminho local em URL no deploy) */}
+          <div className="mockup-card">
+            <img
+              src="/mnt/data/355717B9-F8B6-4845-B372-4D91C5A067F7.jpeg"
+              alt="mockup"
+              className="mockup-img"
+            />
+            <div className="mockup-overlay">
+              <div className="mockup-glow" />
+              <div className="mockup-info">
+                <p className="mini-title">Preview do Gráfico</p>
+                <div className="mini-actions">
+                  <button className="mini-btn green">Compra</button>
+                  <button className="mini-btn red">Venda</button>
+                  <button className="mini-btn yellow">Salvar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="cards">
+        <div className="card">
+          <h3>Resumo Inteligente</h3>
+          <p>Resumo rápido da análise e pontos principais, otimizado para decisões rápidas.</p>
+        </div>
+
+        <div className="card">
+          <h3>Suporte & Resistência</h3>
+          <p>Níveis calculados automaticamente com confiança e sinais técnicos.</p>
+        </div>
+
+        <div className="card">
+          <h3>Estratégias</h3>
+          <p>Entrada, stop loss e take profit sugeridos com timeframe recomendado.</p>
+        </div>
+      </section>
+
+      <footer className="home-footer">
+        <p>© TradeVision AI • Desenvolvido por você</p>
+      </footer>
+    </main>
   );
 }
-
-/* ===================  ESTILOS PREMIUM =================== */
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    background:
-      "radial-gradient(circle at top, #1a082b 0%, #090012 60%, #000000 100%)",
-    animation: "fadeIn 1.2s ease-out forwards",
-    position: "relative",
-    overflow: "hidden",
-    textAlign: "center",
-  },
-
-  // CAIXA DA LOGO
-  logoWrapper: {
-    position: "relative",
-    width: 130,
-    height: 130,
-    marginBottom: 20,
-  },
-
-  // BRILHO AO REDOR
-  logoGlow: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    borderRadius: "50%",
-    background:
-      "radial-gradient(circle, rgba(168,85,247,0.6), rgba(168,85,247,0.1) 60%, transparent 100%)",
-    filter: "blur(25px)",
-    animation: "pulseGlow 3s infinite ease-in-out",
-  },
-
-  // LOGO
-  logo: {
-    width: "100%",
-    height: "100%",
-    zIndex: 2,
-    position: "relative",
-    animation: "float 3s ease-in-out infinite",
-  },
-
-  // TÍTULO
-  title: {
-    fontSize: 34,
-    fontWeight: 700,
-    color: "white",
-    marginTop: 10,
-    textShadow: "0 0 12px #a855f7, 0 0 22px #9333ea",
-    animation: "fadeIn 2s ease-out forwards",
-  },
-
-  // SUBTÍTULO
-  subtitle: {
-    fontSize: 16,
-    color: "#c9a4ff",
-    marginTop: 8,
-    opacity: 0.8,
-  },
-};
-
-/* ===================  ANIMAÇÕES (CSS GLOBAL) =================== */
-/*
-IMPORTANTE: cole isso dentro do arquivo globals.css:
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes pulseGlow {
-  0%   { transform: scale(0.95); opacity: 0.8; }
-  50%  { transform: scale(1.08); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.8; }
-}
-*/
