@@ -6,73 +6,45 @@ export async function POST(req: Request) {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: "E-mail não fornecido." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email ausente" }, { status: 400 });
     }
 
-    // Conectando ao Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE! // <— precisa desse
     );
 
-    // Verifica se o usuário já existe
+    // Busca o usuário
     const { data: user, error } = await supabase
       .from("users")
-      .select("email, used_analyses")
+      .select("*")
       .eq("email", email)
       .single();
 
-    if (error && error.code !== "PGRST116") {
-      return NextResponse.json(
-        { error: "Erro ao buscar usuário." },
-        { status: 500 }
-      );
-    }
-
-    // Se não existir, cria com used_analyses = 0
+    // Se não existir → cria com 5 análises grátis
     if (!user) {
-      const { error: insertError } = await supabase
+      const { error: createErr } = await supabase
         .from("users")
-        .insert([{ email, used_analyses: 0 }]);
+        .insert({ email, free_uses: 5, plan: null });
 
-      if (insertError) {
-        return NextResponse.json(
-          { error: "Erro ao criar usuário." },
-          { status: 500 }
-        );
+      if (createErr) {
+        return NextResponse.json({ error: createErr.message }, { status: 500 });
       }
 
       return NextResponse.json({
-        allowed: true,
-        remaining: 5,
-        used: 0
-      });
-    }
-
-    // Se já existe, valida limite (5 análises grátis)
-    const used = user.used_analyses ?? 0;
-
-    if (used >= 5) {
-      return NextResponse.json({
-        allowed: false,
-        remaining: 0,
-        used
+        free_uses: 5,
+        plan: null
       });
     }
 
     return NextResponse.json({
-      allowed: true,
-      remaining: 5 - used,
-      used
+      free_uses: user.free_uses,
+      plan: user.plan
     });
 
-  } catch (err) {
-    console.error("ERRO CHECK-LIMIT:", err);
+  } catch (err: any) {
     return NextResponse.json(
-      { error: "Erro interno da API." },
+      { error: "Erro interno", details: err.message },
       { status: 500 }
     );
   }
