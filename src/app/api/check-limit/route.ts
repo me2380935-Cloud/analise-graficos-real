@@ -3,79 +3,76 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const { user_id } = await req.json();
+    const { email } = await req.json();
 
-    if (!user_id) {
+    if (!email) {
       return NextResponse.json(
-        { error: "User ID não fornecido." },
+        { error: "E-mail não fornecido." },
         { status: 400 }
       );
     }
 
+    // Conectando ao Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    // 1. Buscar o usuário na tabela "users"
-    const { data: user, error: fetchError } = await supabase
+    // Verifica se o usuário já existe
+    const { data: user, error } = await supabase
       .from("users")
-      .select("analysis_count, premium_until")
-      .eq("id", user_id)
+      .select("email, used_analyses")
+      .eq("email", email)
       .single();
 
-    if (fetchError) {
+    if (error && error.code !== "PGRST116") {
       return NextResponse.json(
         { error: "Erro ao buscar usuário." },
         { status: 500 }
       );
     }
 
-    // 2. Verificar se é premium
-    const now = new Date();
-    const isPremium =
-      user?.premium_until && new Date(user.premium_until) > now;
+    // Se não existir, cria com used_analyses = 0
+    if (!user) {
+      const { error: insertError } = await supabase
+        .from("users")
+        .insert([{ email, used_analyses: 0 }]);
 
-    if (isPremium) {
+      if (insertError) {
+        return NextResponse.json(
+          { error: "Erro ao criar usuário." },
+          { status: 500 }
+        );
+      }
+
       return NextResponse.json({
         allowed: true,
-        remaining: "∞",
-        premium: true,
+        remaining: 5,
+        used: 0
       });
     }
 
-    // 3. Usuário não é premium → verificar limite gratuito
-    const analysisCount = user?.analysis_count ?? 0;
+    // Se já existe, valida limite (5 análises grátis)
+    const used = user.used_analyses ?? 0;
 
-    if (analysisCount >= 5) {
+    if (used >= 5) {
       return NextResponse.json({
         allowed: false,
         remaining: 0,
-        premium: false,
+        used
       });
-    }
-
-    // 4. Permitir e atualizar o contador
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({ analysis_count: analysisCount + 1 })
-      .eq("id", user_id);
-
-    if (updateError) {
-      return NextResponse.json(
-        { error: "Erro ao atualizar contador." },
-        { status: 500 }
-      );
     }
 
     return NextResponse.json({
       allowed: true,
-      remaining: 5 - (analysisCount + 1),
-      premium: false,
+      remaining: 5 - used,
+      used
     });
-  } catch (error) {
+
+  } catch (err) {
+    console.error("ERRO CHECK-LIMIT:", err);
     return NextResponse.json(
-      { error: "Erro no servidor." },
+      { error: "Erro interno da API." },
       { status: 500 }
     );
   }
