@@ -51,4 +51,3 @@ export default function PlansPage() {
     </main>
   );
 }
-// ajuste pequeno
