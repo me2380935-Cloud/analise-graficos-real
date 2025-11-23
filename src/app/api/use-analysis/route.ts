@@ -6,79 +6,54 @@ export async function POST(req: Request) {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: "E-mail não fornecido." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email ausente" }, { status: 400 });
     }
 
-    // Conexão com Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE!
     );
 
-    // Busca o usuário no banco
-    const { data: user, error } = await supabase
+    // Busca o usuário
+    const { data: user } = await supabase
       .from("users")
-      .select("used_analyses")
+      .select("*")
       .eq("email", email)
       .single();
 
-    if (error && error.code !== "PGRST116") {
-      return NextResponse.json(
-        { error: "Erro ao buscar usuário." },
-        { status: 500 }
-      );
-    }
-
-    // Se usuário não existir → cria agora com used_analyses = 1
     if (!user) {
-      const { error: insertError } = await supabase
-        .from("users")
-        .insert([{ email, used_analyses: 1 }]);
-
-      if (insertError) {
-        return NextResponse.json(
-          { error: "Erro ao criar usuário." },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({
-        success: true,
-        used: 1,
-        remaining: 4
-      });
-    }
-
-    // Usuário existe → atualiza o contador
-    const used = (user.used_analyses ?? 0) + 1;
-
-    const { error: updateError } = await supabase
-      .from("users")
-      .update({ used_analyses: used })
-      .eq("email", email);
-
-    if (updateError) {
       return NextResponse.json(
-        { error: "Erro ao atualizar análises." },
-        { status: 500 }
+        { error: "Usuário não encontrado" },
+        { status: 404 }
       );
     }
 
-    const remaining = Math.max(0, 5 - used);
+    // Verifica limites
+    if (user.free_uses <= 0 && !user.plan) {
+      return NextResponse.json(
+        { blocked: true, message: "Limite atingido" },
+        { status: 403 }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      used,
-      remaining
-    });
+    // Desconta 1 análise apenas se estiver no gratuito
+    if (!user.plan) {
+      const newValue = user.free_uses - 1;
 
-  } catch (err) {
-    console.error("ERRO USE-ANALYSIS:", err);
+      await supabase
+        .from("users")
+        .update({ free_uses: newValue })
+        .eq("email", email);
+
+      return NextResponse.json({ success: true, free_uses: newValue });
+    }
+
+    // Planos têm uso ilimitado (por enquanto)
+    return NextResponse.json({ success: true, free_uses: user.free_uses });
+
+  } catch (err: any) {
     return NextResponse.json(
-      { error: "Erro interno da API." },
+      { error: "Erro interno", details: err.message },
       { status: 500 }
     );
   }
