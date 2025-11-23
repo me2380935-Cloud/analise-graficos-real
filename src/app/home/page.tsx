@@ -3,25 +3,13 @@ import "./home.css";
 
 import { useState } from "react";
 import { Upload } from "lucide-react";
+import { getDeviceEmail } from "@/lib/deviceEmail";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // 📌 Função que verifica limite no Supabase
-  const checkLimit = async () => {
-    const resp = await fetch("/api/use-analysis", { method: "POST" });
-    const data = await resp.json();
-
-    if (data.error) return { allowed: false, remaining: 0 };
-
-    return {
-      allowed: data.allowed,
-      remaining: data.remaining,
-    };
-  };
-
-  // 📌 Upload da imagem
+  // Upload handler
   const handleUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -31,7 +19,7 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
-  // 📌 Lógica principal do botão "Analisar"
+  // 🔥 ANALISAR + VERIFICAR LIMITE
   const analyzeChart = async () => {
     if (!image) {
       alert("Envie um gráfico primeiro!");
@@ -40,21 +28,36 @@ export default function Home() {
 
     setLoading(true);
 
-    // 1️⃣ Checa limite primeiro
-    const limit = await checkLimit();
-
-    if (!limit.allowed) {
-      // ❌ sem análises → manda para os planos
-      window.location.href = "/plans";
-      return;
-    }
-
-    // 2️⃣ Se pode analisar → continua com IA
     try {
+      // 🔹 1) pega o email único do dispositivo
+      const deviceEmail = getDeviceEmail();
+
+      // 🔹 2) verifica limite no Supabase
+      const limitCheck = await fetch("/api/check-limit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: deviceEmail })
+      });
+
+      const limit = await limitCheck.json();
+
+      if (limit.error) {
+        alert(limit.error);
+        setLoading(false);
+        return;
+      }
+
+      // ❌ Se terminou as análises grátis → vai para tela de planos
+      if (!limit.allowed) {
+        window.location.href = "/plans";
+        return;
+      }
+
+      // 🔹 3) Agora pode analisar normalmente
       const resp = await fetch("/api/analyze-chart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image }),
+        body: JSON.stringify({ image })
       });
 
       const data = await resp.json();
@@ -123,20 +126,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* UPLOAD */}
+        {/* ÁREA DE UPLOAD */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
           </div>
 
-          <p className="upload-text">{image ? "Imagem carregada!" : "Clique para fazer upload"}</p>
+          <p className="upload-text">
+            {image ? "Imagem carregada!" : "Clique para fazer upload"}
+          </p>
+
           <p className="upload-sub">PNG, JPG ou print de tela</p>
 
           {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
         {/* BOTÃO ANALISAR */}
-        <button className="analisar-btn" onClick={analyzeChart}>
+        <button className="analisar-btn" onClick={analyzeChart} disabled={loading}>
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
       </div>
