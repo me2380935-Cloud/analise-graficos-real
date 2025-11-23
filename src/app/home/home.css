@@ -2,42 +2,26 @@
 
 .page-container {
   min-height: 100vh;
-  padding: 20px 12px; /* 🔥 MENOS padding lateral → espaço real aumenta */
+  padding: 30px;
   background: radial-gradient(circle at top, #260043, #000000 80%);
   color: white;
   font-family: "Inter", sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
 }
 
-/* CARD BASE */
-.card {
-  width: 100%;
-  max-width: 520px; /* 🔥 agora o card pode realmente crescer */
-  margin: 0 auto;   /* centraliza */
+/* ======= HEADER ======= */
+.header-card {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 18px;
   border: 2px solid rgba(172, 63, 255, 0.6);
   box-shadow: 0 0 25px rgba(162, 0, 255, 0.3);
   padding: 25px;
-}
-
-/* HEADER */
-.header-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .app-logo {
-  font-size: 42px;
+  font-size: 40px;
 }
 
 .header-text h1 {
@@ -47,10 +31,10 @@
 
 .header-text p {
   font-size: 14px;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
-/* BOTÃO MODO — Corrigido */
+/* BOTÃO MODO */
 .modo-btn {
   padding: 10px 22px;
   border-radius: 12px;
@@ -65,24 +49,32 @@
   background: rgba(178, 68, 255, 0.2);
 }
 
-/* CARD CAPTURA */
+/* ======= CARD PRINCIPAL ======= */
 .main-card {
-  margin-top: 10px;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  border: 2px solid rgba(172, 63, 255, 0.6);
+  box-shadow: 0 0 25px rgba(162, 0, 255, 0.25);
+  padding: 30px;
 }
 
-/* TÍTULO */
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
+/* Título */
 .card-header h2 {
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 700;
 }
 
-/* UPLOAD BUTTONS */
+/* ------------------ AUMENTO DE ESPAÇAMENTO NAS LATERAIS ------------------ */
+.card-header,
+.upload-area,
+.action-buttons {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/* ------------------------------------------------------------------------ */
+
+/* ===== BOTÕES DE UPLOAD ===== */
 .action-buttons {
   display: flex;
   gap: 12px;
@@ -91,7 +83,7 @@
 .small-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #b244ff;
-  padding: 10px 18px;
+  padding: 10px 20px;
   border-radius: 12px;
   font-size: 15px;
   color: #e6baff;
@@ -102,11 +94,11 @@
   background: rgba(178, 68, 255, 0.3);
 }
 
-/* UPLOAD AREA */
+/* ===== UPLOAD AREA ===== */
 .upload-area {
-  margin-top: 22px;
+  margin-top: 25px;
   border: 2px dashed rgba(200, 120, 255, 0.7);
-  padding: 30px;
+  padding: 40px;
   border-radius: 15px;
   text-align: center;
   transition: 0.3s;
@@ -122,38 +114,104 @@
   opacity: 0.7;
 }
 
-/* PREVIEW IMG */
+/* PREVIEW */
 .preview-img {
   width: 100%;
-  margin-top: 20px;
-  border-radius: 12px;
+  margin-top: 25px;
+  border-radius: 14px;
   border: 2px solid #b455ff;
-  box-shadow: 0 0 15px #b455ff;
+  box-shadow: 0 0 18px #b455ff;
 }
 
-/* BOTÃO ANALISAR — com pulso */
+/* ===== BOTÃO ANALISAR ===== */
 .analisar-btn {
-  margin-top: 22px;
+  margin-top: 30px;
   width: 100%;
   padding: 16px;
   border-radius: 12px;
   background: linear-gradient(90deg, #a600ff, #5b009e);
   color: white;
   font-weight: 700;
-  font-size: 18px;
   border: none;
+  font-size: 18px;
   transition: 0.25s;
-  box-shadow: 0 0 25px #b455ff;
-  animation: pulseButton 2.4s infinite ease-in-out;
+  animation: pulseButton 2.2s infinite ease-in-out;
 }
 
 .analisar-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 25px #c45aff;
 }
 
-/* PULSO DO BOTÃO */
+/* 🔥 Botão pulsante */
 @keyframes pulseButton {
-  0%   { box-shadow: 0 0 12px #b455ff; }
-  50%  { box-shadow: 0 0 28px #d066ff; }
-  100% { box-shadow: 0 0 12px #b455ff; }
+  0% {
+    box-shadow: 0 0 12px #a600ff;
+  }
+  50% {
+    box-shadow: 0 0 28px #d56bff;
+  }
+  100% {
+    box-shadow: 0 0 12px #a600ff;
+  }
+}
+
+/* ===== POPUP PREMIUM ===== */
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.popup-box {
+  background: #12001f;
+  border: 2px solid #b244ff;
+  box-shadow: 0 0 25px #b244ff;
+  padding: 25px;
+  width: 85%;
+  border-radius: 18px;
+  text-align: center;
+  animation: popupFade 0.4s ease-out;
+}
+
+@keyframes popupFade {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.plan-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, #a600ff, #5b009e);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.plan-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 25px #d56bff;
+}
+
+.popup-close {
+  margin-top: 18px;
+  background: transparent;
+  color: #e0b4ff;
+  border: 1px solid #d56bff;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.popup-close:hover {
+  background: rgba(255,255,255,0.1);
 }
