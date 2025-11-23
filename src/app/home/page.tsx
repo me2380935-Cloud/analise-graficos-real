@@ -8,30 +8,29 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [used, setUsed] = useState(0);
-  const [limitReached, setLimitReached] = useState(false);
-  const [showPlans, setShowPlans] = useState(false);
+  const [limit, setLimit] = useState<number | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const MAX_LIMIT = 5;
 
-  // 🔥 CHECK LIMIT on page load
+  // ==== Verifica limite no backend ====
   useEffect(() => {
     async function loadLimit() {
       try {
-        const res = await fetch("/api/check-limit");
-        const data = await res.json();
+        const resp = await fetch("/api/use-analysis", { method: "GET" });
+        const data = await resp.json();
+        setLimit(data.used || 0);
 
-        if (data.error) return;
-
-        setUsed(data.used);
-        setLimitReached(data.used >= 5);
-      } catch (e) {
-        console.log("Erro ao verificar limite");
+        if (data.used >= MAX_LIMIT) {
+          setShowPopup(true);
+        }
+      } catch (err) {
+        console.log("Erro ao carregar limite");
       }
     }
-
     loadLimit();
   }, []);
 
-  // Upload handler
+  // ==== Upload ====
   const handleUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -41,15 +40,15 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
-  // 🔥 ANALISAR + CONTAR USO
+  // ==== ANALISAR GRÁFICO ====
   const analyzeChart = async () => {
-    if (limitReached) {
-      setShowPlans(true);
+    if (!image) {
+      alert("Envie um gráfico primeiro!");
       return;
     }
 
-    if (!image) {
-      alert("Envie um gráfico primeiro!");
+    if (limit !== null && limit >= MAX_LIMIT) {
+      setShowPopup(true);
       return;
     }
 
@@ -67,7 +66,7 @@ export default function Home() {
       if (data.error) {
         alert("Erro: " + data.error);
       } else {
-        // 🔥 Registrar análise usada
+        // Conta uso no Supabase
         await fetch("/api/use-analysis", { method: "POST" });
 
         const params = new URLSearchParams({
@@ -95,26 +94,6 @@ export default function Home() {
 
   return (
     <main className="page-container">
-      {/* POP-UP PREMIUM */}
-      {showPlans && (
-        <div className="popup-overlay">
-          <div className="popup-box">
-            <h2>Limite atingido 🔥</h2>
-            <p>Você usou suas 5 análises gratuitas.</p>
-
-            <h3>Escolha um plano</h3>
-
-            <button className="plan-btn">🔹 Semanal – R$ 9,90</button>
-            <button className="plan-btn">🔹 Mensal – R$ 19,90</button>
-            <button className="plan-btn">🔹 Trimestral – R$ 39,90</button>
-
-            <button className="popup-close" onClick={() => setShowPlans(false)}>
-              Voltar
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* HEADER */}
       <div className="card header-card">
         <div className="header-left">
@@ -129,7 +108,7 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* MAIN CARD */}
+      {/* CARD PRINCIPAL */}
       <div className="card main-card">
         <div className="card-header">
           <div>
@@ -150,7 +129,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* UPLOAD */}
+        {/* ÁREA DE UPLOAD */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
@@ -169,21 +148,34 @@ export default function Home() {
         <button
           className="analisar-btn"
           onClick={analyzeChart}
-          disabled={limitReached}
-          style={{ opacity: limitReached ? 0.5 : 1 }}
+          disabled={limit !== null && limit >= MAX_LIMIT}
+          style={{
+            opacity: limit !== null && limit >= MAX_LIMIT ? 0.5 : 1,
+            cursor: limit !== null && limit >= MAX_LIMIT ? "not-allowed" : "pointer",
+          }}
         >
-          {limitReached
-            ? "Limite de análises atingido"
-            : loading
-            ? "Analisando..."
-            : "Analisar Gráfico"}
+          {loading ? "Analisando..." : limit >= MAX_LIMIT ? "Limite atingido" : "Analisar Gráfico"}
         </button>
-
-        {/* Mostra tentativas restantes */}
-        <p style={{ marginTop: 10, textAlign: "center", opacity: 0.7 }}>
-          Você usou {used} / 5 análises gratuitas
-        </p>
       </div>
+
+      {/* POPUP PREMIUM */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <h2>Limite atingido</h2>
+            <p>Você usou suas 5 análises grátis.</p>
+            <p>Escolha um plano para continuar:</p>
+
+            <button className="plan-btn">Plano Semanal</button>
+            <button className="plan-btn">Plano Mensal</button>
+            <button className="plan-btn">Plano 3 Meses</button>
+
+            <button className="popup-close" onClick={() => setShowPopup(false)}>
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
