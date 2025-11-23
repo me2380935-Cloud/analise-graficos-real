@@ -1,7 +1,7 @@
 "use client";
 
 import "./plans.css";
-
+ 
 export default function PlansPage() {
   return (
     <main className="plans-container">
