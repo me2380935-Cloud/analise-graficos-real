@@ -1,0 +1,74 @@
+ /* ======== CONTAINER ======== */
+.plans-container {
+  min-height: 100vh;
+  padding: 30px;
+  background: radial-gradient(circle at top, #260043, #000000 80%);
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+/* ====== TÍTULOS ====== */
+.plans-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.plans-subtitle {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* ====== CARDS ====== */
+.plan-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #b244ff;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 0 20px rgba(178, 68, 255, 0.25);
+}
+
+.plan-card h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.plan-price {
+  font-size: 22px;
+  color: #d56bff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.plan-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.plan-list li {
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+/* ====== BOTÃO ====== */
+.plan-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #a600ff, #5b009e);
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 0 18px #b244ff;
+  transition: 0.25s;
+}
+
+.plan-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 28px #d56bff;
+}
