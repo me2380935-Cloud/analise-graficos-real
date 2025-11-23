@@ -8,6 +8,20 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // 📌 Função que verifica limite no Supabase
+  const checkLimit = async () => {
+    const resp = await fetch("/api/use-analysis", { method: "POST" });
+    const data = await resp.json();
+
+    if (data.error) return { allowed: false, remaining: 0 };
+
+    return {
+      allowed: data.allowed,
+      remaining: data.remaining,
+    };
+  };
+
+  // 📌 Upload da imagem
   const handleUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -17,6 +31,7 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
+  // 📌 Lógica principal do botão "Analisar"
   const analyzeChart = async () => {
     if (!image) {
       alert("Envie um gráfico primeiro!");
@@ -25,28 +40,17 @@ export default function Home() {
 
     setLoading(true);
 
+    // 1️⃣ Checa limite primeiro
+    const limit = await checkLimit();
+
+    if (!limit.allowed) {
+      // ❌ sem análises → manda para os planos
+      window.location.href = "/plans";
+      return;
+    }
+
+    // 2️⃣ Se pode analisar → continua com IA
     try {
-      // 1️⃣ Verifica limite de análises do usuário
-      const limitResp = await fetch("/api/check-limit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const limitData = await limitResp.json();
-
-      if (limitData.error) {
-        alert(limitData.error);
-        setLoading(false);
-        return;
-      }
-
-      // 2️⃣ Se o limite acabou, manda para a página de planos
-      if (limitData.allowed === false) {
-        window.location.href = "/plans";
-        return;
-      }
-
-      // 3️⃣ Analisar gráfico normalmente
       const resp = await fetch("/api/analyze-chart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -84,7 +88,7 @@ export default function Home() {
   return (
     <main className="page-container">
       
-      {/* ====== HEADER ====== */}
+      {/* HEADER */}
       <div className="card header-card">
         <div className="header-left">
           <div className="app-logo">📊</div>
@@ -98,7 +102,7 @@ export default function Home() {
         <button className="modo-btn">Modo</button>
       </div>
 
-      {/* ====== CARD PRINCIPAL ====== */}
+      {/* CARD PRINCIPAL */}
       <div className="card main-card">
         <div className="card-header">
           <div>
@@ -114,33 +118,24 @@ export default function Home() {
 
             <label className="small-btn">
               Tela
-              <input
-                type="file"
-                accept="image/*"
-                capture="environment"
-                hidden
-                onChange={handleUpload}
-              />
+              <input type="file" accept="image/*" capture="environment" hidden onChange={handleUpload} />
             </label>
           </div>
         </div>
 
-        {/* ====== ÁREA DE UPLOAD ====== */}
+        {/* UPLOAD */}
         <div className="upload-area">
           <div className="upload-icon">
             <Upload size={42} color="white" />
           </div>
 
-          <p className="upload-text">
-            {image ? "Imagem carregada!" : "Clique para fazer upload"}
-          </p>
-
+          <p className="upload-text">{image ? "Imagem carregada!" : "Clique para fazer upload"}</p>
           <p className="upload-sub">PNG, JPG ou print de tela</p>
 
           {image && <img src={image} alt="preview" className="preview-img" />}
         </div>
 
-        {/* ====== BOTÃO ANALISAR ====== */}
+        {/* BOTÃO ANALISAR */}
         <button className="analisar-btn" onClick={analyzeChart}>
           {loading ? "Analisando..." : "Analisar Gráfico"}
         </button>
