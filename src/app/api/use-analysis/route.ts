@@ -1,43 +1,85 @@
 import { NextResponse } from "next/server";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
 
-export async function POST() {
-  const supabase = createRouteHandlerClient({ cookies });
+export async function POST(req: Request) {
+  try {
+    const { email } = await req.json();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "not-authenticated" }, { status: 401 });
-  }
+    if (!email) {
+      return NextResponse.json(
+        { error: "E-mail não fornecido." },
+        { status: 400 }
+      );
+    }
 
-  // pega limites atuais
-  const { data: limit } = await supabase
-    .from("analysis_limits")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+    // Conexão com Supabase
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
-  if (!limit) {
-    return NextResponse.json({ error: "limit-not-found" }, { status: 400 });
-  }
-
-  const { used, max_limit, plan } = limit;
-
-  // usuário ainda tem análises grátis
-  if (used < max_limit || plan !== "free") {
-    const { data: updated } = await supabase
-      .from("analysis_limits")
-      .update({
-        used: plan === "free" ? used + 1 : used, // se premium, não conta
-        updated_at: new Date()
-      })
-      .eq("user_id", user.id)
-      .select()
+    // Busca o usuário no banco
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("used_analyses")
+      .eq("email", email)
       .single();
 
-    return NextResponse.json(updated);
-  }
+    if (error && error.code !== "PGRST116") {
+      return NextResponse.json(
+        { error: "Erro ao buscar usuário." },
+        { status: 500 }
+      );
+    }
 
-  // acabou o limite
-  return NextResponse.json({ error: "limit-reached" });
+    // Se usuário não existir → cria agora com used_analyses = 1
+    if (!user) {
+      const { error: insertError } = await supabase
+        .from("users")
+        .insert([{ email, used_analyses: 1 }]);
+
+      if (insertError) {
+        return NextResponse.json(
+          { error: "Erro ao criar usuário." },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        used: 1,
+        remaining: 4
+      });
+    }
+
+    // Usuário existe → atualiza o contador
+    const used = (user.used_analyses ?? 0) + 1;
+
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ used_analyses: used })
+      .eq("email", email);
+
+    if (updateError) {
+      return NextResponse.json(
+        { error: "Erro ao atualizar análises." },
+        { status: 500 }
+      );
+    }
+
+    const remaining = Math.max(0, 5 - used);
+
+    return NextResponse.json({
+      success: true,
+      used,
+      remaining
+    });
+
+  } catch (err) {
+    console.error("ERRO USE-ANALYSIS:", err);
+    return NextResponse.json(
+      { error: "Erro interno da API." },
+      { status: 500 }
+    );
+  }
 }
