@@ -6,13 +6,18 @@ export async function POST(req: Request) {
     const { image } = await req.json();
 
     if (!image) {
-      return NextResponse.json({ error: "Imagem não recebida" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Imagem não recebida" },
+        { status: 400 }
+      );
     }
 
-    // Inicializa OpenAI com sua chave secreta
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    // Inicializa cliente da OpenAI com sua chave da Vercel
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
-    // Envia imagem para análise
+    // Chamada correta da API nova usando chat.completions
     const result = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -24,7 +29,10 @@ export async function POST(req: Request) {
         {
           role: "user",
           content: [
-            { type: "input_text", text: "Analise esse gráfico e responda em JSON." },
+            {
+              type: "input_text",
+              text: "Analise este gráfico e responda em JSON estruturado.",
+            },
             {
               type: "input_image",
               image_url: image,
@@ -35,11 +43,24 @@ export async function POST(req: Request) {
       response_format: { type: "json_object" },
     });
 
-    const parsed = JSON.parse(result.choices[0].message.content || "{}");
+    // A API retorna o JSON como texto — então precisa parse
+    const responseText = result.choices?.[0]?.message?.content;
+
+    let parsed = {};
+
+    try {
+      parsed = JSON.parse(responseText || "{}");
+    } catch (e) {
+      console.error("Falha ao converter resposta JSON:", e);
+      return NextResponse.json(
+        { error: "Falha ao interpretar JSON retornado pela IA." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(parsed);
-  } catch (err) {
-    console.error("Erro API analyze-chart:", err);
+  } catch (error) {
+    console.error("Erro interno no /analyze-chart:", error);
     return NextResponse.json(
       { error: "Erro interno na análise." },
       { status: 500 }
