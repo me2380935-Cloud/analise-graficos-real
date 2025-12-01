@@ -1,147 +1,68 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-/**
- * Valida de forma simples se a string é uma URL válida.
- */
-function isValidUrl(url: string) {
+export async function POST(req) {
   try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-}
+    const { image } = await req.json();
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json().catch(() => null);
-
-    // -------------------------------
-    // 🔒 VALIDAÇÃO DO INPUT
-    // -------------------------------
-    if (!body || typeof body !== "object") {
+    if (!image) {
       return NextResponse.json(
-        { error: "Request inválida. Envie um JSON contendo 'image'." },
+        { error: "Imagem não recebida" },
         { status: 400 }
       );
     }
 
-    const { image } = body;
-
-    if (!image || typeof image !== "string") {
-      return NextResponse.json(
-        { error: "Campo 'image' obrigatório e deve ser string." },
-        { status: 400 }
-      );
-    }
-
-    if (!isValidUrl(image)) {
-      return NextResponse.json(
-        { error: "A URL enviada não é válida." },
-        { status: 400 }
-      );
-    }
-
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("OPENAI_API_KEY não configurada.");
-      return NextResponse.json(
-        { error: "Erro interno de configuração." },
-        { status: 500 }
-      );
-    }
-
-    // -------------------------------
-    // 🚀 CLIENTE OPENAI
-    // -------------------------------
+    // Cliente OpenAI
     const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.OPENAI_API_KEY
     });
 
-    // -------------------------------
-    // 🤖 CHAMADA À API DE ANÁLISE
-    // -------------------------------
+    // Chamada para análise
     const result = await client.chat.completions.create({
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content:
-            "Você é um analista profissional de gráficos. Sempre responda em JSON válido.",
+          content: "Você é um analista de gráficos profissional. Responda sempre em JSON."
         },
         {
           role: "user",
           content: [
             {
               type: "input_text",
-              text: "Analise este gráfico e retorne um JSON estruturado.",
+              text: "Analise este gráfico e gere os dados em JSON."
             },
             {
               type: "input_image",
-              image_url: image,
-            },
-          ],
-        },
-      ],
+              image_url: image
+            }
+          ]
+        }
+      ]
     });
 
+    // Conteúdo retornado pela IA
     const responseText = result.choices?.[0]?.message?.content;
-
-    if (!responseText) {
-      return NextResponse.json(
-        { error: "A IA não retornou nenhuma resposta." },
-        { status: 500 }
-      );
-    }
-
-    // -------------------------------
-    // 🔍 PARSE SEGURO DO JSON
-    // -------------------------------
-    let parsedJSON;
+    let parsed;
 
     try {
-      parsedJSON = JSON.parse(responseText);
-    } catch (error) {
-      console.error("JSON inválido retornado pela IA:", responseText);
+      parsed = JSON.parse(responseText || "{}");
+    } catch (e) {
+      console.error("Falha ao converter JSON:", e);
       return NextResponse.json(
-        {
-          error: "A IA retornou um JSON inválido.",
-          raw: responseText,
-        },
+        { error: "Falha ao interpretar JSON retornado pela IA." },
         { status: 500 }
       );
     }
 
-    // Garante que não venha um tipo inesperado
-    if (typeof parsedJSON !== "object" || Array.isArray(parsedJSON)) {
-      return NextResponse.json(
-        {
-          error: "O JSON retornado não possui formato de objeto.",
-          raw: parsedJSON,
-        },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json(parsed);
 
-    // -------------------------------
-    // ✅ RESPOSTA FINAL
-    // -------------------------------
-    return NextResponse.json({
-      success: true,
-      data: parsedJSON,
-    });
-
-  } catch (err: any) {
-    console.error("Erro inesperado no analyze-chart:", err?.message || err);
-
+  } catch (err) {
+    console.error("Erro interno /analyze-chart:", err);
     return NextResponse.json(
-      {
-        error: "Erro interno inesperado.",
-      },
+      { error: "Erro interno ao analisar o gráfico." },
       { status: 500 }
     );
   }
-}
-
 }
